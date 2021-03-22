@@ -31,10 +31,6 @@ app.use(cors({
 	maxAge: 3600
 }))
 
-//body parser middleware package config
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-
 
 //session configuration
 app.use(expressSession({
@@ -42,6 +38,10 @@ app.use(expressSession({
     resave: false,
     saveUninitialized: true
 }));
+
+//body parser middleware package config
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 
 //Passport config import
@@ -61,6 +61,7 @@ passport.deserializeUser((id, done) => {
 		done(new Error("Failed to deserialize an user"));
 	});
 });
+
 
 
 //mongoose configuration

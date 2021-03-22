@@ -7,6 +7,7 @@ const express       = require("express"),
 
 //routes(Authentication)
 router.post('/user', function(req, res, next){
+	console.log(req)
 	var Creation = new User({email: req.body.user.email, username: req.body.user.username});
 	User.register(Creation, req.body.user.password, function(err, user) { 
 		if (err) { 
@@ -14,7 +15,7 @@ router.post('/user', function(req, res, next){
 		} else {
 			console.log('A user just registered');
 			passport.authenticate('local');
-				res.status(400).json({
+				res.status(200).json({
 					authenticated: true,
 					message: `Created ${user.username}!`
 				})

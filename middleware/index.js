@@ -25,8 +25,9 @@ middlewareObj.clientErrorHandler = (err, req, res, next) => {
 }
 
 middlewareObj.errorHandler = (err, req, res, next) => {
-	res.status(400);
-	res.render('error', { error: err })
+	res.status(400).json({
+		message: err.message
+	})
 }
 
 module.exports = middlewareObj;

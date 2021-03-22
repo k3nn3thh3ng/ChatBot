@@ -13,7 +13,7 @@ const express       = require("express"),
 router.get("/logout", async (req, res, next) => {
 	await req.logout();
 	console.log("successfully logout")
-	res.status(400).json({
+	res.status(200).json({
 		authenticated: false,
 		message: `${user.username} Logout!`
 	})
@@ -27,7 +27,7 @@ router.post('/login', async function(req, res, next) {
 	// 	username: req.body.username,
 	// 	password: req.body.password
 	// })
-	await passport.authenticate('local', { failureRedirect: '/' }),
+	await passport.authenticate('local', { failureRedirect: '/login' }),
 	function (req, res, err) {
 		if (err) {
 			next(err)
