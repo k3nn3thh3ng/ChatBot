@@ -1,5 +1,5 @@
 {
-  "name": "chatbox-func",
+  "name": "React + Express Template with Auth",
   "version": "1.0.0",
   "description": "refer to readme.md",
   "main": "server.js",
