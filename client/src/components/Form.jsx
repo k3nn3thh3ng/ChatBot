@@ -35,12 +35,11 @@ function Form(props) {
 	}
 	
 	const handleSubmit = async (event) => {
-		const user = {
+		const response = await API.post(`${props.destination}`, { 
 			username: values.username,
 			password: values.password,
-			email: values.email
-		} 
-		const response = await API.post(`${props.destination}`, { user })
+			email: values.email 
+		})
 		.then(res => {
 			console.log(res);
 			console.log(res.data);

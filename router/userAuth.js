@@ -10,38 +10,36 @@ const express       = require("express"),
 
 
 //routes(Authentication)
-router.get("/logout", async (req, res, next) => {
+router.get("/logout", async (req, res) => {
 	await req.logout();
 	console.log("successfully logout")
 	res.status(200).json({
 		authenticated: false,
-		message: `${user.username} Logout!`
+		message: `Success Logout!`
 	})
 });
 	
 
-router.post('/login', async function(req, res, next) {
-	console.log(req.body);
-	// body parser should pass username and password correctly
-	// const user = new User({
-	// 	username: req.body.username,
-	// 	password: req.body.password
-	// })
-	await passport.authenticate('local', { failureRedirect: '/login' }),
-	function (req, res, err) {
-		if (err) {
-			next(err)
-		}
-		console.log('local auth success')
-		res.status(200).json({
-			authenticated: true,
-			user: req.user,
-			cookies: req.cookies,
-			message: `Welcome ${user.username}!`
-		})
-	}
-})
+router.post("/login", passport.authenticate("local",{
+	failureRedirect: "/login"
+}), function(req, res){
+	res.status(200).json({
+		authenticated: true,
+		user: req.user,
+		message: `Welcome ${req.user.username}!`,
+		session: req.session,
+		sessionID: req.sessionID
+	})
+});
 
+router.get("/testroute", function(req, res){
+	console.log(req);
+	res.status(200).json({
+		authenticated: true,
+		session: req.session,
+		sessionID: req.sessionID
+	})
+});
 	
 
 module.exports = router;

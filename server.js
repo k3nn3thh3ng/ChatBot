@@ -21,7 +21,17 @@ const middlewareObj = require('./middleware/index');
 
 //port configuration
 const PORT = process.env.PORT || 3001;
-	
+
+//mongoose configuration
+mongoose.connect(process.env.MONGODB_CONNECT, {useNewUrlParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
+mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	console.log('MongoDB Connected!')
+});
+
 //allowing cors
 app.use(cors({
 	origin: true,
@@ -48,41 +58,23 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 const passportSetup = require("./strategy/passport-local-setup");
-passport.serializeUser((user, done) => {
-	done(null, user.id);
-});
-// deserialize the cookieUserId to user in the database
-passport.deserializeUser((id, done) => {
-	User.findById(id)
-	.then(user => {
-		done(null, user);
-	})
-	.catch(e => {
-		done(new Error("Failed to deserialize an user"));
-	});
-});
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 
-//mongoose configuration
-mongoose.connect(process.env.MONGODB_CONNECT, {useNewUrlParser: true, useUnifiedTopology: true});
-const db = mongoose.connection;
-mongoose.set('useCreateIndex', true);
-mongoose.set('useFindAndModify', false);
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-	console.log('MongoDB Connected!')
-});
+
 
 //Routes Config
 app.use('/api', userCRUD);
 app.use('/api', userAuth);
 
 
-app.get("/", middlewareObj.authCheck, (req, res) => {
+app.get("/api/status", middlewareObj.authCheck, (req, res) => {
+	console.log("success /api/status")
 	res.status(200).json({
 		authenticated: true,
-		message: "user successfully authenticated",
+		message: "user information retrieve success",
 		user: req.user,
 		cookies: req.cookies
 	});

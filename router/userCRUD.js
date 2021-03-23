@@ -14,13 +14,15 @@ router.post('/user', function(req, res, next){
 			next(err)
 		} else {
 			console.log('A user just registered');
-			passport.authenticate('local');
-				res.status(200).json({
+			passport.authenticate('local')(req, res, function(){
+					res.status(200).json({
 					authenticated: true,
-					message: `Created ${user.username}!`
+					message: `Created ${user.username}!`,
+					user: req.user
 				})
-			}
-		});
+			})
+		}
+	});
 }); 
 
 // Please add in validation for requesting own data vs others data

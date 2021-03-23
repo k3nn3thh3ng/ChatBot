@@ -1,6 +1,7 @@
 const middlewareObj = {};
 
 middlewareObj.authCheck = (req, res, next) => {
+	console.log (req.user)
 	if (!req.user) {
 		res.status(400).json({
 			authenticated: false,
