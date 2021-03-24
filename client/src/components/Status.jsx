@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles, createStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import API from '../apis';
 
@@ -10,7 +10,7 @@ const styles = (theme) => createStyles({
 })
 
 function Status(props) {
-	const { classes } = props;
+	// const { classes } = props;
 	const initialValues = {
 		username: ''
 	}
@@ -22,7 +22,7 @@ function Status(props) {
 	}, [values.username])
 	
 	const checkAuthenticate = async (event) => {
-		const response = await API.get('/status')
+		await API.get('/status')
 		.then(res => {
 			console.log(res);
 			console.log(res.data);

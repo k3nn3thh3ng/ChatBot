@@ -7,6 +7,15 @@ const express = require('express'),
 	  expressSession = require('express-session');
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+	cors: {
+		origin: "https://chatbox-func-mqyln.run.goorm.io",
+		methods: ["GET", "POST"],
+		allowedHeaders: ["my-custom-header"],
+		credentials: true
+	}
+})
 
 //Models
 const User = require("./models/user-model");
@@ -80,12 +89,44 @@ app.get("/api/status", middlewareObj.authCheck, (req, res) => {
 	});
 });
 
+app.get("/socket.io", (req, res) => {
+	res.status(200).json({
+		authenticated: true,
+		message: "user information retrieve success",
+		user: req.user,
+		cookies: req.cookies
+	});
+});
+
+
 //Error-handling middleware
 app.use(middlewareObj.logErrors)
 app.use(middlewareObj.clientErrorHandler)
 app.use(middlewareObj.errorHandler)
 
 //app listening start
-app.listen(PORT, () => {
+let interval;
+
+io.on('connection', (socket) => { 
+	console.log(socket.id);
+	console.log(socket.connected);
+	console.log("New client connected");
+	if (interval) {
+		clearInterval(interval);
+	};
+	interval = setInterval(() => getApiAndEmit(socket), 1000);
+	socket.on("disconnect", () => {
+		console.log("Client disconnected");
+		clearInterval(interval);
+  	});
+});
+
+const getApiAndEmit = (socket) => {
+	const response = new Date();
+	// Emitting a new message. Will be consumed by the client
+	socket.emit("FromAPI", response);
+};
+
+server.listen(PORT, () => {
     console.log('Server started on port', PORT);
 });
