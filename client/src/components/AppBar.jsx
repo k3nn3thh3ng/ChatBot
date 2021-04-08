@@ -40,6 +40,9 @@ export default function ButtonAppBar() {
 				<Typography variant="h6" className={classes.title}>
 					Home
 				</Typography>
+				<Link to="/AdminChatRoom" className={classes.link}>
+					<Button color="inherit">Admin Chat Room</Button>
+				</Link>
 				<Link to="/user/register" className={classes.link}>
 					<Button color="inherit">Register</Button>
 				</Link>

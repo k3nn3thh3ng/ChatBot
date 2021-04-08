@@ -1,9 +1,8 @@
 const middlewareObj = {};
 
 middlewareObj.authCheck = (req, res, next) => {
-	console.log (req.user)
-	if (!req.user) {
-		res.status(400).json({
+	if (req.user === undefined) {
+		res.status(401).json({
 			authenticated: false,
 			message: "user has not been authenticated"
 		});
@@ -30,5 +29,11 @@ middlewareObj.errorHandler = (err, req, res, next) => {
 		message: err.message
 	})
 }
+
+middlewareObj.wrap = (middleware) => (socket, next) => middleware(
+	socket.request, 
+	{}, 
+	next
+);
 
 module.exports = middlewareObj;

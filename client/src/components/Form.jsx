@@ -32,18 +32,16 @@ function Form(props) {
 	}
 	
 	const handleSubmit = async (event) => {
-		const response = await API.post(`${props.destination}`, { 
+		await API.post(`${props.destination}`, { 
 			username: values.username,
 			password: values.password,
 			email: values.email 
 		})
 		.then(res => {
-			console.log(res);
-			console.log(res.data);
+			console.log('success in sending data');
 		})
 		//should add axios function to export enquiry
 		setValues(initialValues);
-		console.log(response)
 	}
 	
 	return (

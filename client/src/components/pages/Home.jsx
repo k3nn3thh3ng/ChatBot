@@ -4,6 +4,8 @@ import { withStyles, createStyles } from '@material-ui/core/styles';
 
 import Boiler from '../Boiler';
 import Status from '../Status';
+import Chat from '../Chat';
+
 
 const ENDPOINT = "https://chatbox-api.run.goorm.io";
 
@@ -23,13 +25,17 @@ function Home(props) {
 				"my-custom-header": "abcd"
 			}
 		});
+		socket.on("connect", () => {
+			console.log("time handshake established")
+		})
 		socket.on("FromAPI", data => {
+			console.log("Time Received")
 			setResponse(data);
 		});
 		socket.on("connect_error", (err) => {
 		  console.log(`connect_error due to ${err.message}`);
 		});
-		console.log("handshake sent")
+		
 		//Cleanup
 		return () => socket.disconnect();
 	}, []);
@@ -41,6 +47,7 @@ function Home(props) {
 			</h1>
 			It's <time dateTime={response}>{response}</time>
 			<Status />
+			<Chat />
 		</Boiler>
 	);
 	
